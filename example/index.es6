@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import List, { MakeList } from '../index'
 import values from 'lodash/object/values'
 
@@ -79,4 +80,4 @@ var Demo = React.createClass({
 
 var demo = document.createElement('div')
 document.body.appendChild(demo)
-React.render(<Demo />, demo)
+ReactDOM.render(<Demo />, demo)

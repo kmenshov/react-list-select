@@ -12,8 +12,21 @@ import range from 'lodash/utility/range'
 import remove from 'lodash/array/remove'
 import reject from 'lodash/collection/reject'
 import uniq from 'lodash/array/uniq'
+import {SortableContainer, arrayMove} from 'react-sortable-hoc'
 import {KEYS, KEY} from './keys'
 import ListItem from './ListItem'
+
+const SortableList = SortableContainer(({classes, onKeyDown, items}) => {
+  return (
+    <ul
+      className={classes}
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+    >
+      {items}
+    </ul>
+  );
+});
 
 let MakeList = ({keyboardEvents=true}={}) => {
 
@@ -184,6 +197,12 @@ let MakeList = ({keyboardEvents=true}={}) => {
 			}
 		},
 
+    onSortEnd({oldIndex, newIndex}) {
+      console.log(`Sorting from ${oldIndex} to ${newIndex}`);
+
+      // this.props.onSort({oldIndex, newIndex});
+    },
+
 		render() {
 			let items = map(this.props.items, (itemContent, index) => {
 				let disabled = includes(this.state.disabledItems, index)
@@ -201,11 +220,15 @@ let MakeList = ({keyboardEvents=true}={}) => {
 					</ListItem>
 			})
 
-			return <ul className={cx('react-list-select', this.props.className)}
-				tabIndex={0}
-				onKeyDown={keyboardEvents && this.onKeyDown}>
-				{items}
-			</ul>
+			return <SortableList
+          lockAxis="y"
+          lockToContainerEdges
+          useDragHandle
+          classes={cx('react-list-select', this.props.className)}
+  				onKeyDown={keyboardEvents && this.onKeyDown}
+          onSortEnd={this.onSortEnd}
+          items={items}
+        />
 		}
 	})
 	return List
